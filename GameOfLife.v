@@ -8,49 +8,49 @@
  */
 
 module GameOfLife ( /*****INPUTS*****/
-					input [9:0] SW, 
-					input [3:0] KEY, 
-					input CLOCK_50, 
-					/*****OUTPUTS*****/
-					output VGA_CLK, VGA_HS, VGA_VS,
-					output VGA_BLANK_N, VGA_SYNC_N, 
-					output [7:0] VGA_R, VGA_G, VGA_B,
-					output [9:0] LEDR, 
-					output [6:0] HEX0, HEX1, HEX2, HEX3
-				  );
+			input [9:0] SW, 
+			input [3:0] KEY, 
+			input CLOCK_50, 
+		    /*****OUTPUTS*****/
+			output VGA_CLK, VGA_HS, VGA_VS,
+			output VGA_BLANK_N, VGA_SYNC_N, 
+			output [7:0] VGA_R, VGA_G, VGA_B,
+			output [9:0] LEDR, 
+			output [6:0] HEX0, HEX1, HEX2, HEX3
+		  );
 	
 	
 	//-------------DECLARATIONS-------------//	
-	wire       go;							// *go* determines the state of current game		 
-	wire [4:0] preset;						// *preset* determines which preset is to be displayed
-	reg  [7:0] x;							// *x* coordinate of pixel
-	reg  [6:0] y;							// *y* coordinate of pixel
-											//
-	wire clock2Hz;							// 2Hz clock
-	wire clock4Hz;							// 4Hz Clock
-											//
-	parameter n = 32;						// *n* parameter specifies width of array
-	parameter m = 32;						// *m* parameter specifies height of array
-											//
-	reg  [n*m-1: 0] array;					// master array
-											//
+	wire       go;				// *go* determines the state of current game		 
+	wire [4:0] preset;			// *preset* determines which preset is to be displayed
+	reg  [7:0] x;				// *x* coordinate of pixel
+	reg  [6:0] y;				// *y* coordinate of pixel
+						//
+	wire clock2Hz;				// 2Hz clock
+	wire clock4Hz;				// 4Hz Clock
+						//
+	parameter n = 32;			// *n* parameter specifies width of array
+	parameter m = 32;			// *m* parameter specifies height of array
+						//
+	reg  [n*m-1: 0] array;			// master array
+						//
 	wire [n*m-1: 0] array_preset1;	    	// created array presets for user to play
-	wire [n*m-1: 0] array_preset2;			// :
-	wire [n*m-1: 0] array_preset3;			// :
-	wire [n*m-1: 0] array_preset4;			// :
-	wire [n*m-1: 0] array_preset5;			// :
-	wire [n*m-1: 0] array_preset6;			// :
-	wire [n*m-1: 0] array_preset7;			// :
-	wire [n*m-1: 0] array_preset8;			// :
-	wire [n*m-1: 0] array_preset9;			// :
-	wire [n*m-1: 0] array_preset10;			// :
-											//
-	wire [n*m-1: 0] array_wir;    			// wire net to master array
-	wire [n*m-1: 0] array_out;  			// output wire from nextStateSolver
-	wire [n*m-1: 0] array_out_user;			// output wire from userSetLocation
-											//
-	integer i,  sum;						// 
-	wire [10:0] hex_sum;					// wire for total amount of live pixels
+	wire [n*m-1: 0] array_preset2;		// :
+	wire [n*m-1: 0] array_preset3;		// :
+	wire [n*m-1: 0] array_preset4;		// :
+	wire [n*m-1: 0] array_preset5;		// :
+	wire [n*m-1: 0] array_preset6;		// :
+	wire [n*m-1: 0] array_preset7;		// :
+	wire [n*m-1: 0] array_preset8;		// :
+	wire [n*m-1: 0] array_preset9;		// :
+	wire [n*m-1: 0] array_preset10;		// :
+						//
+	wire [n*m-1: 0] array_wir;    		// wire net to master array
+	wire [n*m-1: 0] array_out;  		// output wire from nextStateSolver
+	wire [n*m-1: 0] array_out_user;		// output wire from userSetLocation
+						//
+	integer i,  sum;			// 
+	wire [10:0] hex_sum;			// wire for total amount of live pixels
 	wire [3:0]  hex0_, hex1_, hex2_, hex3_;	// wires to each of the HEX outputs
 	//--------------------------------------//
 	
@@ -398,21 +398,21 @@ module GameOfLife ( /*****INPUTS*****/
 	begin
 		case(go)
 			1'b0: begin
-				  	case(preset)
-						4'b0000: array <= array_out_user;
-						4'b0001: array <= array_preset1;
-						4'b0010: array <= array_preset2;
-						4'b0011: array <= array_preset3;
-						4'b0100: array <= array_preset4;
-						4'b0101: array <= array_preset5;
-						4'b0110: array <= array_preset6;
-						4'b0111: array <= presetArray7;
-						4'b1000: array <= array_preset8;
-						4'b1001: array <= array_preset9;
-						4'b1010: array <= array_preset10;
-						default: array <= array_out_user;
-				   	endcase
-				   end
+				  case(preset)
+					4'b0000: array <= array_out_user;
+					4'b0001: array <= array_preset1;
+					4'b0010: array <= array_preset2;
+					4'b0011: array <= array_preset3;
+					4'b0100: array <= array_preset4;
+					4'b0101: array <= array_preset5;
+					4'b0110: array <= array_preset6;
+					4'b0111: array <= presetArray7;
+					4'b1000: array <= array_preset8;
+					4'b1001: array <= array_preset9;
+					4'b1010: array <= array_preset10;
+					default: array <= array_out_user;
+			   	endcase
+			end
 			1'b1: array <= array_out;
 		endcase
 	 end
@@ -465,28 +465,28 @@ module GameOfLife ( /*****INPUTS*****/
 		/************************ SCREEN OUTPUT ************************/
 		fill screenOut(
 					.CLOCK_50(CLOCK_50),  			  // On Board 50 MHz
-					.resetn(KEY[0]),		  		  // On Board Keys
-					.x_wir(x),						  // pass in x (modified above)
-					.y_wir(y),						  // pass in y (modified above)
-					.array(array_wir),				  // pass in array_wir
-					.x_in(SW[4:0]),					  // switches for user input (x-coordinate)
-					.y_in(SW[9:5]),					  // switches for user input (y-coordinate)
-					.preset(preset),  				  // preset code 'xxxxx'
-													  //
-					.VGA_CLK(VGA_CLK),   		      // VGA Clock
-					.VGA_HS(VGA_HS),  			 	  // VGA H_SYNC
-					.VGA_VS(VGA_VS),				  // VGA V_SYNC
+					.resetn(KEY[0]),		  	  // On Board Keys
+					.x_wir(x),				  // pass in x (modified above)
+					.y_wir(y),				  // pass in y (modified above)
+					.array(array_wir),			  // pass in array_wir
+					.x_in(SW[4:0]),				  // switches for user input (x-coordinate)
+			 		.y_in(SW[9:5]),				  // switches for user input (y-coordinate)
+					.preset(preset),  			  // preset code 'xxxxx'
+										  //
+					.VGA_CLK(VGA_CLK),   		          // VGA Clock
+					.VGA_HS(VGA_HS),  			  // VGA H_SYNC
+					.VGA_VS(VGA_VS),			  // VGA V_SYNC
 					.VGA_BLANK_N(VGA_BLANK_N),		  // VGA BLANK
 					.VGA_SYNC_N(VGA_SYNC_N),		  // VGA SYNC
-					.VGA_R(VGA_R),   	  			  // VGA Red[9:0]
-					.VGA_G(VGA_G),					  // VGA Green[9:0]
-					.VGA_B(VGA_B)					  // VGA Blue[9:0]
-					);			
+					.VGA_R(VGA_R),   	  		  // VGA Red[9:0]
+					.VGA_G(VGA_G),				  // VGA Green[9:0]
+					.VGA_B(VGA_B)				  // VGA Blue[9:0]
+				);			
 				
 		/********** ENABLE USER TO PICK LIVE PIXELS **********/
 		userSetLocation userSelect(.clock(CLOCK_50), .SW(SW[9:0]), .KEY(KEY[1]), .go(go), 
-								   .array_in(array_wir), .array_out_user(array_out_user), 
-								   .x_hex(x_hex), .y_hex(y_hex));
+					   .array_in(array_wir), .array_out_user(array_out_user), 
+					   .x_hex(x_hex), .y_hex(y_hex));
 	
 		/********** DECIDE WHAT TO DISPLAY ON HEX **********/
 		toDisplayOnHex display(.hex_sum(hex_sum), .hex0_(hex0_), .hex1_(hex1_), .hex2_(hex2_), .hex3_(hex3));
@@ -504,25 +504,25 @@ endmodule
 
 
 module fill(
-			input CLOCK_50,			// On Board 50 MHz
-			input resetn,			// 
-			input [7:0]  x_wir,     // x coordinate
-			input [6:0]  y_wir,    	// y coordinate
-			input [4:0]  x_in,	    //
-			input [4:0]  y_in,		//
-			input [4:0]  preset,	// preset code
-			input [n*m-1:0] array,  // master array wire
+		input CLOCK_50,		// On Board 50 MHz
+		input resetn,		// 
+		input [7:0]  x_wir,     // x coordinate
+		input [6:0]  y_wir,    	// y coordinate
+		input [4:0]  x_in,	//
+		input [4:0]  y_in,	//
+		input [4:0]  preset,	// preset code
+		input [n*m-1:0] array,  // master array wire
 
-			// Ports below are for the VGA output.
-			output	 	 VGA_CLK,   		//  VGA Clock
-			output       VGA_HS,  			//  VGA H_SYNC
-			output 	     VGA_VS,			//  VGA V_SYNC
-			output       VGA_BLANK_N,		//  VGA BLANK
-			output 	     VGA_SYNC_N,		//  VGA SYNC
-			output [9:0] VGA_R,   			//  VGA Red[9:0]
-			output [9:0] VGA_G,	 			//  VGA Green[9:0]
-			output [9:0] VGA_B   			//  VGA Blue[9:0]
-		   );
+		// Ports below are for the VGA output.
+		output	     VGA_CLK,   		//  VGA Clock
+		output       VGA_HS,  			//  VGA H_SYNC
+		output 	     VGA_VS,			//  VGA V_SYNC
+		output       VGA_BLANK_N,		//  VGA BLANK
+		output 	     VGA_SYNC_N,		//  VGA SYNC
+		output [9:0] VGA_R,   			//  VGA Red[9:0]
+		output [9:0] VGA_G,	 		//  VGA Green[9:0]
+		output [9:0] VGA_B   			//  VGA Blue[9:0]
+	   );
 
 
 	/*************************************************OUTPUT TEXT**************************************************/	
@@ -750,43 +750,43 @@ module fill(
 	// Create an Instance of a VGA controller
 	// Define number of colours + initial background image file (.MIF) for controller.
 	vga_adapter VGA(
-					.resetn(resetn),
-					.clock(CLOCK_50),
-					.colour(colour),
-					.x(x),
-					.y(y),
-					.plot(writeEn),
+				.resetn(resetn),
+				.clock(CLOCK_50),
+				.colour(colour),
+				.x(x),
+				.y(y),
+				.plot(writeEn),
 
-					/* Signals for DAC to drive monitor. */
-					.VGA_R(VGA_R),
-					.VGA_G(VGA_G),
-					.VGA_B(VGA_B),
-					.VGA_HS(VGA_HS),
-					.VGA_VS(VGA_VS),
-					.VGA_BLANK(VGA_BLANK_N),
-					.VGA_SYNC(VGA_SYNC_N),
-					.VGA_CLK(VGA_CLK)
-					);
+				/* Signals for DAC to drive monitor. */
+				.VGA_R(VGA_R),
+				.VGA_G(VGA_G),
+				.VGA_B(VGA_B),
+				.VGA_HS(VGA_HS),
+				.VGA_VS(VGA_VS),
+				.VGA_BLANK(VGA_BLANK_N),
+				.VGA_SYNC(VGA_SYNC_N),
+				.VGA_CLK(VGA_CLK)
+			);
 
-	defparam VGA.RESOLUTION 		  	 = "160x120";
-	defparam VGA.MONOCHROME 			 = "FALSE";
+	defparam VGA.RESOLUTION  	     = "160x120";
+	defparam VGA.MONOCHROME 	     = "FALSE";
 	defparam VGA.BITS_PER_COLOUR_CHANNEL = 1;
-	defparam VGA.BACKGROUND_IMAGE 	 	 = "DNA.mif";
+	defparam VGA.BACKGROUND_IMAGE 	     = "DNA.mif";
 	
 endmodule
 
 
 
 module userSetLocation (input clock, go, KEY,
-						input 	   [9:0]     SW, 
-						input      [n*m-1:0] array_in,
-						output reg [n*m-1:0] array_out_user, 
-						output reg [3:0]     x_hex, y_hex
-				     	);	
+			input 	   [9:0]     SW, 
+			input      [n*m-1:0] array_in,
+			output reg [n*m-1:0] array_out_user, 
+			output reg [3:0]     x_hex, y_hex
+		     	);	
 
-	parameter  m = 32, n = 32;  // array dimensions n*m
+	parameter  m = 32, n = 32;      // array dimensions n*m
 	reg [9:0] location; 		// (x,y) location based on SW	
-	integer i;					// counter to loop through n*m array
+	integer i;			// counter to loop through n*m array
 	integer x_, y_;     		// maintain (x,y) location
 	integer location_;  		// maintain location based on SW 
 	integer clicks = 0; 		// maintain number of clicks (KEY)
@@ -866,9 +866,9 @@ module nextStateSolver(input [n*m-1:0]array, input clock, go, output reg[n*m-1:0
 	
 	//------DECLARATIONS------//
 	parameter n = 32, m = 32; // n*m parameters for board size
-	integer i;				  // *i* loops through entire board
-	integer sum;		  	  // maintains temporary number of live ones beside given pixel
-	integer live;   		  // maintains number of live pixels 
+	integer i;		  // *i* loops through entire board
+	integer sum;		  // maintains temporary number of live ones beside given pixel
+	integer live;   	  // maintains number of live pixels 
 	//------------------------//
 
 	always @(posedge clock)		
@@ -964,12 +964,12 @@ module clock2Hz(input CLOCK_50, output reg clock);
     always @(posedge CLOCK_50) 
     begin
         if (count == 25000000) begin
-			count <= 0;
-			clock <= 1;
+		count <= 0;
+		clock <= 1;
         end
        	else begin
-			count <= count + 1;
-			clock <= 0;
+		count <= count + 1;
+		clock <= 0;
         end				 
     end
 
@@ -979,17 +979,17 @@ endmodule
 
 module clock4Hz(input CLOCK_50, output reg clock); 
 	
-	reg [31:0] count;
+    reg [31:0] count;
 
     always @(posedge CLOCK_50) 
     begin
         if (count == 12500000) begin
-			count <= 0;
-			clock <= 1;
+		count <= 0;
+		clock <= 1;
         end
         else begin
-			count <= count + 1;
-			clock <= 0;
+		count <= count + 1;
+		clock <= 0;
         end				 
     end
 
