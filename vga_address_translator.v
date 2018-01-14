@@ -1,6 +1,6 @@
 /* This module converts a user specified coordinates into a memory address.
  * The output of the module depends on the resolution set by the user.
- */
+ */ 
 module vga_address_translator(x, y, mem_address);
 
 	parameter RESOLUTION = "320x240";
