@@ -1,4 +1,4 @@
-/* VGA Adapter
+/* VGA Adapter 
  * ----------------
  *
  * This is an implementation of a VGA Adapter. The adapter uses VGA mode signalling to initiate
